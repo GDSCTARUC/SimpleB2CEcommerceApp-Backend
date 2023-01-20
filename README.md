@@ -16,6 +16,25 @@
 2. SQL
 3. ASP.NET Core Web API
 
+## How to make a database migration and update database?
+We will be using OAuthServer as an example. OAuthServer contains 2 `DbContext` which is `OAuthContext` and `KeysContext`.
+
+For OAuthContext:
+```bash
+1. dotnet ef migrations add OAuth_Migrations_01 -c OAuthContext -o Infrastructure/Migrations/OAuth
+2. dotnet ef database update -c OAuthContext
+```
+
+For KeysContext:
+```bash
+1. dotnet ef migrations add Keys_Migrations_01 -c OAuthContext -o Infrastructure/Migrations/Keys
+2. dotnet ef database update -c KeysContext
+```
+
+-c: DbContext
+
+-o: File output path
+
 ## How to create a pull request?
 
 ```bash
