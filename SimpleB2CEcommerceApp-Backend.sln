@@ -20,12 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGatewayServer", "ApiGate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{8251CDDA-6693-4010-836C-003E59FB6CEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontendServer", "FrontendServer\FrontendServer.csproj", "{FF7CAFDD-5CC2-4F43-B673-D79A1EB7D3C1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8251CDDA-6693-4010-836C-003E59FB6CEE} = {8251CDDA-6693-4010-836C-003E59FB6CEE}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer", "OAuthServer\OAuthServer.csproj", "{A188D084-CC98-45EE-A15D-AFD35C912F7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer", "AuthServer\AuthServer.csproj", "{A0755D41-50A7-4FDF-A283-BEBFAA378042}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +44,10 @@ Global
 		{8251CDDA-6693-4010-836C-003E59FB6CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8251CDDA-6693-4010-836C-003E59FB6CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8251CDDA-6693-4010-836C-003E59FB6CEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF7CAFDD-5CC2-4F43-B673-D79A1EB7D3C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF7CAFDD-5CC2-4F43-B673-D79A1EB7D3C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF7CAFDD-5CC2-4F43-B673-D79A1EB7D3C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF7CAFDD-5CC2-4F43-B673-D79A1EB7D3C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A188D084-CC98-45EE-A15D-AFD35C912F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A188D084-CC98-45EE-A15D-AFD35C912F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A188D084-CC98-45EE-A15D-AFD35C912F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A188D084-CC98-45EE-A15D-AFD35C912F7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0755D41-50A7-4FDF-A283-BEBFAA378042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0755D41-50A7-4FDF-A283-BEBFAA378042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0755D41-50A7-4FDF-A283-BEBFAA378042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0755D41-50A7-4FDF-A283-BEBFAA378042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

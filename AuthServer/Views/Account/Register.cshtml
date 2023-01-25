@@ -1,0 +1,16 @@
+﻿@model UserRegisterRequest
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<form asp-action="Register" asp-controller="Account" method="post">
+    <input asp-for="Username" type="text" placeholder="Username" />
+    <input asp-for="FirstName" type="text" placeholder="FirstName" />
+    <input asp-for="LastName" type="text" placeholder="LastName" />
+    <input asp-for="Email" type="text" placeholder="Email" />
+    <input asp-for="Password" type="password" placeholder="Password" />
+    <input asp-for="PasswordRetype" type="password" placeholder="Password Retype" />
+
+    <button type="submit">Register</button>
+</form>

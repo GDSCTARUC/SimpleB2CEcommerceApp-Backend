@@ -1,0 +1,19 @@
+﻿@model UserLoginRequest
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (ViewBag.Error)
+{
+    <span>Error Message: @ViewBag.ErrorMessage</span>
+}
+
+<form asp-action="Login" asp-controller="Account" method="post">
+    <input asp-for="ReturnUrl" type="hidden" />
+    
+    <input asp-for="Username" type="text" placeholder="Username" />
+    <input asp-for="Password" type="password" placeholder="Password" />
+
+    <button type="submit">Login</button>
+</form>
