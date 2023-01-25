@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    var authenticationResult = await Context.AuthenticateAsync();
+    var issued = authenticationResult.Properties.Items[".issued"];
+    var expires = authenticationResult.Properties.Items[".expires"];
+    var id = @User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier).Value;
+
+    <div>
+        <p>You are signed in as</p>
+        <h2>User Id: @id</h2>
+        <hr />
+        <dl>
+            <dt>Issued</dt>
+            <dd>@issued</dd>
+            <dt>Expires</dt>
+            <dd>@expires</dd>
+        </dl>
+        <hr />
+        <p><a asp-action="Logout" asp-controller="Account" class="btn btn-dark">Sign out</a></p>
+    </div>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div>
+        <p>You are not signed in.</p>
+        <p><a asp-action="Login" asp-controller="Account" class="btn btn-sm btn-dark">Sign in</a></p>
+        <p><a asp-action="Register" asp-controller="Account" class="btn btn-sm btn-dark">Register</a></p>
+    </div>
+}
