@@ -1,3 +1,4 @@
+using ApiGatewayServer.Constants;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -13,10 +14,23 @@ builder.Configuration
     .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true)
     .AddEnvironmentVariables();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(ApiGatewayServerCorsDefaults.PolicyName, policy =>
+    {
+        policy.WithOrigins(ApiGatewayServerCorsDefaults.CorsOriginHttps, ApiGatewayServerCorsDefaults.CorsOriginHttp)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddOcelot();
 
 var app = builder.Build();
 
+app.UseCors(ApiGatewayServerCorsDefaults.PolicyName);
+app.UseHttpsRedirection();
 app.UseOcelot().Wait();
 
 app.Run();

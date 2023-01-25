@@ -19,10 +19,10 @@ namespace AuthServer
             var context = scope.ServiceProvider.GetRequiredService<AuthContext>();
             await context.Database.EnsureCreatedAsync(cancellationToken);
 
-            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-            if (await manager.FindByClientIdAsync("postman", cancellationToken) == null)
+            var applicationManager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+            if (await applicationManager.FindByClientIdAsync("postman", cancellationToken) == null)
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
                     ClientId = "postman",
                     ClientSecret = "postman-secret",
@@ -42,17 +42,18 @@ namespace AuthServer
                         OpenIddictConstants.Permissions.Scopes.Email,
                         OpenIddictConstants.Permissions.Scopes.Phone,
                         OpenIddictConstants.Permissions.Scopes.Roles,
-                        
-                        OpenIddictConstants.Permissions.Prefixes.Scope + "api",
+
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "cart_api",
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "product_api",
 
                         OpenIddictConstants.Permissions.ResponseTypes.Code
                     }
                 }, cancellationToken);
             }
 
-            if (await manager.FindByClientIdAsync("frontend", cancellationToken) == null)
+            if (await applicationManager.FindByClientIdAsync("frontend", cancellationToken) == null)
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
                     ClientId = "frontend",
                     DisplayName = "Frontend Client",
@@ -74,71 +75,61 @@ namespace AuthServer
                         OpenIddictConstants.Permissions.Scopes.Phone,
                         OpenIddictConstants.Permissions.Scopes.Roles,
 
-                        OpenIddictConstants.Permissions.Prefixes.Scope + "api",
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "cart_api",
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "product_api",
 
                         OpenIddictConstants.Permissions.ResponseTypes.Code
                     }
                 }, cancellationToken);
             }
 
-            if (await manager.FindByClientIdAsync("cart-server", cancellationToken) == null)
+            if (await applicationManager.FindByClientIdAsync("cart_server", cancellationToken) == null)
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
-                    ClientId = "cart-server",
-                    ClientSecret = "cart-server-secret",
-                    DisplayName = "Cart Server",
-                    RedirectUris = { new Uri("https://localhost:5010/auth/") },
+                    ClientId = "cart_server",
+                    ClientSecret = "cart_server_secret",
                     Permissions =
                     {
-                        OpenIddictConstants.Permissions.Endpoints.Authorization,
-                        OpenIddictConstants.Permissions.Endpoints.Token,
                         OpenIddictConstants.Permissions.Endpoints.Introspection,
-
-                        OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-                        OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
-                        OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
-
-                        OpenIddictConstants.Permissions.Scopes.Profile,
-                        OpenIddictConstants.Permissions.Scopes.Address,
-                        OpenIddictConstants.Permissions.Scopes.Email,
-                        OpenIddictConstants.Permissions.Scopes.Phone,
-                        OpenIddictConstants.Permissions.Scopes.Roles,
-
-                        OpenIddictConstants.Permissions.Prefixes.Scope + "api",
-
-                        OpenIddictConstants.Permissions.ResponseTypes.Code
                     }
                 }, cancellationToken);
             }
 
-            if (await manager.FindByClientIdAsync("product-server", cancellationToken) == null)
+            if (await applicationManager.FindByClientIdAsync("product_server", cancellationToken) == null)
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
-                    ClientId = "product-server",
-                    ClientSecret = "product-server-secret",
-                    DisplayName = "Product Server",
-                    RedirectUris = { new Uri("https://localhost:5020/auth/") },
+                    ClientId = "product_server",
+                    ClientSecret = "product_server_secret",
                     Permissions =
                     {
-                        OpenIddictConstants.Permissions.Endpoints.Authorization,
-                        OpenIddictConstants.Permissions.Endpoints.Token,
                         OpenIddictConstants.Permissions.Endpoints.Introspection,
+                    }
+                }, cancellationToken);
+            }
 
-                        OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-                        OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
-                        OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+            var scopeManager = scope.ServiceProvider.GetRequiredService<IOpenIddictScopeManager>();
+            if (await scopeManager.FindByNameAsync("cart_api", cancellationToken) == null)
+            {
+                await scopeManager.CreateAsync(new OpenIddictScopeDescriptor
+                {
+                    Name = "cart_api",
+                    Resources = 
+                    { 
+                        "cart_server" 
+                    }
+                }, cancellationToken);
+            }
 
-                        OpenIddictConstants.Permissions.Scopes.Profile,
-                        OpenIddictConstants.Permissions.Scopes.Address,
-                        OpenIddictConstants.Permissions.Scopes.Email,
-                        OpenIddictConstants.Permissions.Scopes.Phone,
-                        OpenIddictConstants.Permissions.Scopes.Roles,
-
-                        OpenIddictConstants.Permissions.Prefixes.Scope + "api",
-
-                        OpenIddictConstants.Permissions.ResponseTypes.Code
+            if (await scopeManager.FindByNameAsync("product_api", cancellationToken) == null)
+            {
+                await scopeManager.CreateAsync(new OpenIddictScopeDescriptor
+                {
+                    Name = "product_api",
+                    Resources =
+                    {
+                        "product_server"
                     }
                 }, cancellationToken);
             }

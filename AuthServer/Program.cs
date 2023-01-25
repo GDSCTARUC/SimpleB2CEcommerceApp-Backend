@@ -4,6 +4,8 @@ using AuthServer.Infrastructure.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AuthServer
@@ -34,14 +36,6 @@ namespace AuthServer
                 });
             });
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.Name = "auth";
-                    options.LoginPath = "/account/login";
-                    options.LogoutPath = "/account/logout";
-                });
-
             builder.Services.AddOpenIddict()
                 .AddCore(options =>
                 {
@@ -50,6 +44,11 @@ namespace AuthServer
                 })
                 .AddServer(options =>
                 {
+                    options.AddEncryptionKey(new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes("thisisaveryverylongencryptionkey")));
+
+                    options.AddDevelopmentSigningCertificate();
+
                     options.AllowClientCredentialsFlow()
                         .AllowAuthorizationCodeFlow()
                         .RequireProofKeyForCodeExchange()
@@ -61,18 +60,38 @@ namespace AuthServer
                         .SetUserinfoEndpointUris("/connect/userinfo")
                         .SetLogoutEndpointUris("/connect/logout");
 
-                    options.AddEphemeralEncryptionKey()
-                        .AddEphemeralSigningKey();
-
-                    options.RegisterScopes(Scopes.Profile, Scopes.Email, Scopes.Roles, Scopes.Phone, Scopes.Address, Scopes.Roles, "api");
+                    options.RegisterScopes(
+                        Scopes.Profile,
+                        Scopes.Email,
+                        Scopes.Roles,
+                        Scopes.Phone,
+                        Scopes.Address,
+                        Scopes.Roles,
+                        "cart_api",
+                        "product_api");
 
                     options.UseAspNetCore()
                         .EnableAuthorizationEndpointPassthrough()
                         .EnableTokenEndpointPassthrough()
                         .EnableUserinfoEndpointPassthrough()
                         .EnableLogoutEndpointPassthrough();
+                })
+               .AddValidation(options =>
+                {
+                    options.UseLocalServer();
+
+                    options.UseAspNetCore();
                 });
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = "auth";
+                    options.LoginPath = "/account/login";
+                    options.LogoutPath = "/account/logout";
+                });
+
+            builder.Services.AddAuthorization();
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews();
             builder.Services.AddHostedService<Worker>();
