@@ -58,6 +58,7 @@ namespace AuthServer
                         .SetTokenEndpointUris("/connect/token")
                         .SetIntrospectionEndpointUris("/connect/introspect")
                         .SetUserinfoEndpointUris("/connect/userinfo")
+                        .SetVerificationEndpointUris("/conenct/verify")
                         .SetLogoutEndpointUris("/connect/logout");
 
                     options.RegisterScopes(
@@ -74,7 +75,8 @@ namespace AuthServer
                         .EnableAuthorizationEndpointPassthrough()
                         .EnableTokenEndpointPassthrough()
                         .EnableUserinfoEndpointPassthrough()
-                        .EnableLogoutEndpointPassthrough();
+                        .EnableLogoutEndpointPassthrough()
+                        .EnableStatusCodePagesIntegration();
                 })
                .AddValidation(options =>
                 {
@@ -93,12 +95,15 @@ namespace AuthServer
 
             builder.Services.AddAuthorization();
             builder.Services.AddRazorPages();
-            builder.Services.AddControllersWithViews();
+            
+            builder.Services.AddControllersWithViews()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy());
+            
             builder.Services.AddHostedService<Worker>();
             builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
             var app = builder.Build();
-            
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");

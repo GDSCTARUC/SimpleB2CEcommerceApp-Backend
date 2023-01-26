@@ -115,9 +115,9 @@ namespace AuthServer
                 await scopeManager.CreateAsync(new OpenIddictScopeDescriptor
                 {
                     Name = "cart_api",
-                    Resources = 
-                    { 
-                        "cart_server" 
+                    Resources =
+                    {
+                        "cart_server"
                     }
                 }, cancellationToken);
             }

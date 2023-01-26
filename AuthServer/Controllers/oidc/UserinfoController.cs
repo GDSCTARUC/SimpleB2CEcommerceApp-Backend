@@ -45,12 +45,12 @@ namespace AuthServer.Controllers.oidc
 
             if (User.HasScope(Scopes.Profile))
             {
-                claims[Claims.Profile] = JsonSerializer.Serialize(new
+                claims[Claims.Profile] = new
                 {
                     user.Username,
                     user.FirstName,
                     user.LastName
-                });
+                };
             }
 
             if (User.HasScope(Scopes.Address))
@@ -66,7 +66,7 @@ namespace AuthServer.Controllers.oidc
 
             if (User.HasScope(Scopes.Phone))
             {
-                
+
             }
 
             if (User.HasScope(Scopes.Roles))
