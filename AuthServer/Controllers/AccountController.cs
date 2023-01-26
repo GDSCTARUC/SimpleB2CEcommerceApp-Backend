@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OpenIddict.Server.AspNetCore;
 using SharedLibrary.Infrastructure.Requests;
 using System.Security.Claims;
 
@@ -28,7 +27,7 @@ namespace AuthServer.Controllers
         {
             ViewBag.Error = false;
             ViewBag.ErrorMessage = null;
-            
+
             return View(new UserLoginRequest
             {
                 ReturnUrl = returnUrl
@@ -89,8 +88,8 @@ namespace AuthServer.Controllers
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
 
-            return !string.IsNullOrWhiteSpace(userLoginRequest.ReturnUrl) 
-                ? Redirect(userLoginRequest.ReturnUrl) 
+            return !string.IsNullOrWhiteSpace(userLoginRequest.ReturnUrl)
+                ? Redirect(userLoginRequest.ReturnUrl)
                 : RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

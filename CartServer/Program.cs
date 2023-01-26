@@ -1,6 +1,5 @@
 using CartServer.Constants;
 using CartServer.Infrastructure.Context;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Validation.AspNetCore;
 
@@ -51,5 +50,5 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/cartServer/secret",() => "Secret").RequireAuthorization();
+app.MapGet("/cartServer/secret", () => "Secret").RequireAuthorization();
 await app.RunAsync();
