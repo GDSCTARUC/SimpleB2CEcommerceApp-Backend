@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using SharedLibrary.Infrastructure.DataTransferObjects;
-using System.Text.Json;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AuthServer.Controllers.oidc

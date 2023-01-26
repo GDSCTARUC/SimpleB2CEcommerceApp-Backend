@@ -94,11 +94,12 @@ namespace AuthServer
                 });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddRazorPages();
-            
+            builder.Services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
+
             builder.Services.AddControllersWithViews()
                 .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy());
-            
+
             builder.Services.AddHostedService<Worker>();
             builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 

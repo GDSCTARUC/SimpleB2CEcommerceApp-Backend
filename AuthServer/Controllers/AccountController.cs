@@ -23,10 +23,15 @@ namespace AuthServer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login([FromQuery] string returnUrl)
+        public IActionResult Login([FromQuery] string returnUrl, [FromQuery] string? from)
         {
-            ViewBag.Error = false;
+            ViewBag.RegisterSuccessMessage = null;
             ViewBag.ErrorMessage = null;
+
+            if (from == "registerSuccess")
+            {
+                ViewBag.RegisterSuccessMessage = "You sucessfully register an account, you can now login!";
+            }
 
             return View(new UserLoginRequest
             {
@@ -37,7 +42,6 @@ namespace AuthServer.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            ViewBag.Error = false;
             ViewBag.ErrorMessage = null;
 
             return View();
@@ -66,7 +70,6 @@ namespace AuthServer.Controllers
 
             if (user == null)
             {
-                ViewBag.Error = true;
                 ViewBag.ErrorMessage = "User credentials invalid";
                 return View();
             }
@@ -74,7 +77,6 @@ namespace AuthServer.Controllers
             var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHashed, userLoginRequest.Password);
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
-                ViewBag.Error = true;
                 ViewBag.ErrorMessage = "User credentials invalid";
                 return View();
             }
@@ -104,7 +106,6 @@ namespace AuthServer.Controllers
 
             if (userRegisterRequest.Password != userRegisterRequest.PasswordRetype)
             {
-                ViewBag.Error = true;
                 ViewBag.ErrorMessage = "Password does not match with password retype";
             }
 
@@ -114,7 +115,10 @@ namespace AuthServer.Controllers
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(AccountController.Login), "Account");
+            return RedirectToAction(nameof(AccountController.Login), "Account", new 
+            {
+                from = "registerSuccess"
+            });
         }
     }
 }
