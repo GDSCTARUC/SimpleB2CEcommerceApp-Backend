@@ -1,12 +1,16 @@
+using System.Text.Json;
 using CartServer.Constants;
 using CartServer.Infrastructure.Context;
+using CartServer.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Validation.AspNetCore;
+using SharedLibrary.Infrastructure.DataTransferObjects;
+using SharedLibrary.Infrastructure.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Server=127.0.0.1;Database=CartServer;User=ky;Password=abc123456789;";
+                              + $"Password={builder.Configuration["Cart:MariaDBPassword"]};";
 
 builder.Services.AddDbContextPool<CartContext>(options =>
     options.UseMySql(
@@ -50,5 +54,72 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/cartServer/secret", () => "Secret").RequireAuthorization();
+// GET: Cart with Id
+app.MapGet("/cartServer/cart/{id:int}/",
+    async (int id, CartContext context) =>
+        context.Carts == null
+            ? Results.BadRequest()
+            : Results.Ok((CartDto)await context.Carts.SingleOrDefaultAsync(m => m.Id == id))
+).RequireAuthorization();
+
+// POST: Create Cart
+app.MapPost("/cartServer/cart/", async (CartRequest cartRequest, CartContext context) =>
+{
+    try
+    {
+        await context.Carts.AddAsync((Cart)cartRequest);
+        await context.SaveChangesAsync();
+    }
+    catch
+    {
+        return Results.BadRequest();
+    }
+
+    return Results.Ok();
+}).RequireAuthorization();
+
+// PUT: Update Cart
+app.MapPut("/cartServer/cart/{id:int}/", async (int id, CartRequest cartRequest, CartContext context) =>
+{
+    var cart = await context.Carts.FindAsync(id);
+
+    if (cart == null)
+        return Results.BadRequest("Cart not found");
+
+    try
+    {
+        cart.ProductIds = JsonSerializer.Serialize(cartRequest.ProductIds);
+
+        context.Carts.Update(cart);
+        await context.SaveChangesAsync();
+    }
+    catch
+    {
+        return Results.BadRequest();
+    }
+
+    return Results.Ok();
+}).RequireAuthorization();
+
+// DELETE: Delete Cart
+app.MapDelete("/cartServer/cart/{id:int}", async (int id, CartContext context) =>
+{
+    var cart = await context.Carts.FindAsync(id);
+
+    if (cart == null)
+        return Results.BadRequest("Cart not found");
+
+    try
+    {
+        context.Carts.Remove(cart);
+        await context.SaveChangesAsync();
+    }
+    catch
+    {
+        return Results.BadRequest();
+    }
+
+    return Results.Ok();
+}).RequireAuthorization();
+
 await app.RunAsync();
