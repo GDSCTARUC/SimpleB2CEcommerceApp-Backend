@@ -1,3 +1,4 @@
+using System.Text.Json;
 using CartServer.Constants;
 using CartServer.Infrastructure.Context;
 using CartServer.Infrastructure.Models;
@@ -87,12 +88,9 @@ app.MapPut("/cartServer/cart/{id:int}/", async (int id, CartRequest cartRequest,
 
     try
     {
-        var cartToDb = (Cart)cartRequest;
-        cartToDb.Id = cart.Id;
-        cartToDb.UpdatedAt = cart.UpdatedAt;
-        cartToDb.CreatedAt = cart.CreatedAt;
+        cart.ProductIds = JsonSerializer.Serialize(cartRequest.ProductIds);
 
-        context.Carts.Update((Cart)cartRequest);
+        context.Carts.Update(cart);
         await context.SaveChangesAsync();
     }
     catch
