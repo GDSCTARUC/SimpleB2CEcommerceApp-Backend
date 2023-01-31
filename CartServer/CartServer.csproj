@@ -4,26 +4,36 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>AF842DB5-DB76-4E2B-8319-C1B25964FD23</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
+        <PackageReference Include="FluentValidation" Version="10.3.6"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="4.0.0" />
-        <PackageReference Include="OpenIddict.Validation.SystemNetHttp" Version="4.0.0" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+        <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="4.0.0"/>
+        <PackageReference Include="OpenIddict.Validation.SystemNetHttp" Version="4.0.0"/>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
+        <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\Migrations\" />
-      <Folder Include="Infrastructure\Models\" />
+        <Folder Include="Infrastructure\Migrations"/>
+        <Folder Include="Infrastructure\Models\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Controllers\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Controllers\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Controllers\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Controllers\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Controllers\Index.cshtml"/>
     </ItemGroup>
 
 </Project>

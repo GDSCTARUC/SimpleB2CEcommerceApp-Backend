@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Authentication
-@using System.Security.Claims;
-
+@using System.Security.Claims
 @{
     ViewData["Title"] = "Home";
 }
@@ -9,14 +8,14 @@
     <div class="flex flex-col w-[350px]">
         <h1 class="text-4xl font-bold">Account Center</h1>
 
-        <hr class="my-4" />
+        <hr class="my-4"/>
 
         @if (User.Identity.IsAuthenticated)
         {
             var authenticationResult = await Context.AuthenticateAsync();
             var issued = authenticationResult.Properties.Items[".issued"];
             var expires = authenticationResult.Properties.Items[".expires"];
-            var id = @User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier).Value;
+            var id = User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier).Value;
 
             <div class="flex flex-col gap-5">
                 <h1 class="text-xl font-semibold">You are signed in.</h1>

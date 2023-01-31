@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SharedLibrary.Infrastructure.DataTransferObjects
-{
-    public class ConsentFormDto
-    {
-        [Display(Name = "Application")]
-        public string ApplicationName { get; set; }
+namespace SharedLibrary.Infrastructure.DataTransferObjects;
 
-        [Display(Name = "Scope")]
-        public string Scope { get; set; }
-    }
+public class ConsentFormDto
+{
+    [Display(Name = "Application")] public string ApplicationName { get; set; }
+
+    [Display(Name = "Scope")] public string Scope { get; set; }
 }
