@@ -5,9 +5,12 @@ namespace CartServer.Infrastructure.Context;
 
 public class CartContext : DbContext
 {
-    public CartContext(DbContextOptions<CartContext> options) : base(options)
-    {
-    }
+    protected readonly IConfiguration Configuration;
 
     public DbSet<Cart> Carts { get; set; } = null;
+
+    public CartContext(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 }

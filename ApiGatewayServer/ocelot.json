@@ -5,8 +5,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5010
+          "Host": "gdsctarumt-cart.azurewebsites.net",
+          "Port": 443
         }
       ],
       "UpstreamPathTemplate": "/api_cart/{catchAll}",
@@ -24,8 +24,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5020
+          "Host": "gdsctarumt-product.azurewebsites.net",
+          "Port": 443
         }
       ],
       "UpstreamPathTemplate": "/api_product/{catchAll}",
@@ -40,6 +40,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:5000"
+    "BaseUrl": "https://gdsctarumt-apigateway.azurewebsites.net"
   }
 }

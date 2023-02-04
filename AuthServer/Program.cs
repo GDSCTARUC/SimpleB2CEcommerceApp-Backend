@@ -1,7 +1,9 @@
+using System.Data.SqlTypes;
 using System.Text;
 using AuthServer.Constants;
 using AuthServer.Infrastructure.Context;
 using AuthServer.Infrastructure.Models;
+using AuthServer.Infrastructure.Policies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +14,20 @@ namespace AuthServer;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                                      + $"Password={builder.Configuration["Auth:MariaDBPassword"]}";
-
-        builder.Services.AddDbContextPool<AuthContext>(options =>
+        switch (builder.Configuration["DatabaseProvider"])
         {
-            options.UseMySql(defaultConnectionString, ServerVersion.AutoDetect(defaultConnectionString));
-            options.UseOpenIddict();
-        });
+            case "MySql":
+                builder.Services.AddDbContext<AuthContext, AuthMySqlContext>();
+                break;
+
+            case "AzureSql":
+                builder.Services.AddDbContext<AuthContext, AuthAzureSqlContext>();
+                break;
+        }
 
         builder.Services.AddCors(options =>
         {
@@ -31,8 +35,7 @@ public static class Program
             {
                 policy.WithOrigins(AuthServerCorsDefault.CorsOriginHttps, AuthServerCorsDefault.CorsOriginHttp)
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
+                    .AllowAnyHeader();
             });
         });
 
@@ -44,10 +47,16 @@ public static class Program
             })
             .AddServer(options =>
             {
-                options.AddEncryptionKey(new SymmetricSecurityKey(
+                if (builder.Environment.IsProduction())
+                {
+                    options.AddEncryptionCertificate("26C6F6AC1B25896897083A79692087A01D0F50D1")
+                        .AddSigningCertificate("26C6F6AC1B25896897083A79692087A01D0F50D1");
+                }
+                else
+                {
+                    options.AddEncryptionKey(new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes("thisisaveryverylongencryptionkey")));
-
-                options.AddDevelopmentSigningCertificate();
+                }
 
                 options.AllowClientCredentialsFlow()
                     .AllowAuthorizationCodeFlow()
@@ -108,6 +117,8 @@ public static class Program
 
         if (!app.Environment.IsDevelopment())
         {
+            app.Services.GetRequiredService<AuthContext>().Database.Migrate();
+
             app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
@@ -127,6 +138,6 @@ public static class Program
             "{area:exists}/{controller=Home}/{action=Index}/{id?}");
         app.UseDeveloperExceptionPage();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

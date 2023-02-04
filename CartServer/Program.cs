@@ -9,14 +9,56 @@ using SharedLibrary.Infrastructure.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                              + $"Password={builder.Configuration["Cart:MariaDBPassword"]};";
+switch (builder.Configuration["DatabaseProvider"])
+{
+    case "MySql":
+        builder.Services.AddDbContext<CartContext, CartMySqlContext>();
+        break;
 
-builder.Services.AddDbContextPool<CartContext>(options =>
-    options.UseMySql(
-        defaultConnectionString,
-        ServerVersion.AutoDetect(defaultConnectionString)
-    ));
+    case "AzureSql":
+        builder.Services.AddDbContext<CartContext, CartAzureSqlContext>();
+        break;
+}
+
+if (builder.Environment.IsProduction())
+{    
+    builder.Services.AddOpenIddict()
+        .AddValidation(options =>
+        {
+            options.SetIssuer("https://gdsctarumt-openid.azurewebsites.net");
+            options.AddAudiences("cart_server");
+
+            options.UseIntrospection()
+                .SetClientId("cart_server")
+                .SetClientSecret("cart_server_secret");
+
+            options.UseSystemNetHttp();
+
+            options.UseAspNetCore();
+        });
+
+    builder.Services.AddLogging(options =>
+    {
+        options.AddAzureWebAppDiagnostics();
+    });
+}
+else
+{
+    builder.Services.AddOpenIddict()
+        .AddValidation(options =>
+        {
+            options.SetIssuer("https://localhost:4000");
+            options.AddAudiences("cart_server");
+
+            options.UseIntrospection()
+                .SetClientId("cart_server")
+                .SetClientSecret("cart_server_secret");
+
+            options.UseSystemNetHttp();
+
+            options.UseAspNetCore();
+        });
+}
 
 builder.Services.AddCors(options =>
 {
@@ -24,25 +66,9 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(CartServerCorsDefaults.CorsOriginHttps, CartServerCorsDefaults.CorsOriginHttp)
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
-
-builder.Services.AddOpenIddict()
-    .AddValidation(options =>
-    {
-        options.SetIssuer("https://localhost:4000");
-        options.AddAudiences("cart_server");
-
-        options.UseIntrospection()
-            .SetClientId("cart_server")
-            .SetClientSecret("cart_server_secret");
-
-        options.UseSystemNetHttp();
-
-        options.UseAspNetCore();
-    });
 
 builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 builder.Services.AddAuthorization();

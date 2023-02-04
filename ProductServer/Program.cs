@@ -9,40 +9,65 @@ using SharedLibrary.Infrastructure.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                              + $"Password={builder.Configuration["Product:MariaDBPassword"]};";
+switch (builder.Configuration["DatabaseProvider"])
+{
+    case "MySql":
+        builder.Services.AddDbContext<ProductContext, ProductMySqlContext>();
+        break;
 
-builder.Services.AddDbContextPool<ProductContext>(options =>
-    options.UseMySql(
-        defaultConnectionString,
-        ServerVersion.AutoDetect(defaultConnectionString)
-    ));
+    case "AzureSql":
+        builder.Services.AddDbContext<ProductContext, ProductAzureSqlContext>();
+        break;
+}
 
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddOpenIddict()
+        .AddValidation(options =>
+        {
+            options.SetIssuer("https://gdsctarumt-openid.azurewebsites.net");
+            options.AddAudiences("product_server");
+
+            options.UseIntrospection()
+                .SetClientId("product_server")
+                .SetClientSecret("product_server_secret");
+
+            options.UseSystemNetHttp();
+
+            options.UseAspNetCore();
+        });
+
+    builder.Services.AddLogging(options =>
+    {
+        options.AddAzureWebAppDiagnostics();
+    });
+}
+else
+{
+    builder.Services.AddOpenIddict()
+        .AddValidation(options =>
+        {
+            options.SetIssuer("https://localhost:4000");
+            options.AddAudiences("product_server");
+
+            options.UseIntrospection()
+                .SetClientId("product_server")
+                .SetClientSecret("product_server_secret");
+
+            options.UseSystemNetHttp();
+
+            options.UseAspNetCore();
+        });
+}
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(ProductServerCorsDefaults.PolicyName, policy =>
     {
         policy.WithOrigins(ProductServerCorsDefaults.CorsOriginHttps, ProductServerCorsDefaults.CorsOriginHttp)
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
-
-builder.Services.AddOpenIddict()
-    .AddValidation(options =>
-    {
-        options.SetIssuer("https://localhost:4000");
-        options.AddAudiences("product_server");
-
-        options.UseIntrospection()
-            .SetClientId("product_server")
-            .SetClientSecret("product_server_secret");
-
-        options.UseSystemNetHttp();
-
-        options.UseAspNetCore();
-    });
 
 builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 builder.Services.AddAuthorization();

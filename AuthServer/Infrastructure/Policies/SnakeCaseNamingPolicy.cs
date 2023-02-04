@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace AuthServer;
+namespace AuthServer.Infrastructure.Policies;
 
 public class SnakeCaseNamingPolicy : JsonNamingPolicy
 {
