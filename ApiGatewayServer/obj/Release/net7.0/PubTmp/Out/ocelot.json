@@ -1,0 +1,45 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/cartServer/{catchAll}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "gdsctarumt-cart.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api_cart/{catchAll}",
+      "UpstreamHttpMethod": [
+        "Options",
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "Priority": 1
+    },
+    {
+      "DownstreamPathTemplate": "/productServer/{catchAll}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "gdsctarumt-product.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api_product/{catchAll}",
+      "UpstreamHttpMethod": [
+        "Options",
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "Priority": 2
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://gdsctarumt-apigateway.azurewebsites.net"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "JwGhIFGew54+c6X6SudARtv8siqt5NlGsyI8bIIpomk=",
+  "Source": "CartServer",
+  "BasePath": "_content/CartServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

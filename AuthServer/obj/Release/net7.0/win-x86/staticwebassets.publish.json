@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "Hash": "oY8KXilG6Ap2ObuiX/vAJAHHtdRojaPmS/c5S9a/e4U=",
+  "Source": "AuthServer",
+  "BasePath": "_content/AuthServer",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "AuthServer\\wwwroot",
+      "Source": "AuthServer",
+      "ContentRoot": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\",
+      "BasePath": "_content/AuthServer",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\css\\site.css",
+      "SourceId": "AuthServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\",
+      "BasePath": "_content/AuthServer",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\favicon.ico",
+      "SourceId": "AuthServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\",
+      "BasePath": "_content/AuthServer",
+      "RelativePath": "favicon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\js\\site.js",
+      "SourceId": "AuthServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\AuthServer\\wwwroot\\",
+      "BasePath": "_content/AuthServer",
+      "RelativePath": "js/site.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\site.js"
+    }
+  ]
+}

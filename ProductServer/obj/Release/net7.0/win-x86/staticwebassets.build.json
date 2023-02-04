@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "6yf5AcKtPELbdhbiZsKyeUj90dXIEb++Jr3c03Q3uGg=",
+  "Source": "ProductServer",
+  "BasePath": "_content/ProductServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ProductServer\\wwwroot",
+      "Source": "ProductServer",
+      "ContentRoot": "C:\\Users\\youknowwhoiam\\Documents\\Programming\\Projects\\SimpleB2CEcommerceApp-Backend\\ProductServer\\wwwroot\\",
+      "BasePath": "_content/ProductServer",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "cCyjYc12bxsig0xt+HIh4cJfBJsykY15dz3QqGcH4ZM=",
+  "Source": "ApiGatewayServer",
+  "BasePath": "_content/ApiGatewayServer",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

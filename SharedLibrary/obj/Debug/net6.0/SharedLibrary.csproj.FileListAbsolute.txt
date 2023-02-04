@@ -1,0 +1,12 @@
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\bin\Debug\net6.0\SharedLibrary.deps.json
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\bin\Debug\net6.0\SharedLibrary.dll
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\bin\Debug\net6.0\SharedLibrary.pdb
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.csproj.AssemblyReference.cache
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.AssemblyInfoInputs.cache
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.AssemblyInfo.cs
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.csproj.CoreCompileInputs.cache
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.dll
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\refint\SharedLibrary.dll
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\SharedLibrary.pdb
+C:\Programming\Projects\SimpleB2CEcommerceApp-Backend\SharedLibrary\obj\Debug\net6.0\ref\SharedLibrary.dll
