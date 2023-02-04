@@ -14,14 +14,21 @@ builder.Configuration
     .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true)
     .AddEnvironmentVariables();
 
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddLogging(options =>
+    {
+        options.AddAzureWebAppDiagnostics();
+    });
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(ApiGatewayServerCorsDefaults.PolicyName, policy =>
     {
         policy.WithOrigins(ApiGatewayServerCorsDefaults.CorsOriginHttps, ApiGatewayServerCorsDefaults.CorsOriginHttp)
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
 
@@ -33,4 +40,4 @@ app.UseCors(ApiGatewayServerCorsDefaults.PolicyName);
 app.UseHttpsRedirection();
 app.UseOcelot().Wait();
 
-app.Run();
+await app.RunAsync();

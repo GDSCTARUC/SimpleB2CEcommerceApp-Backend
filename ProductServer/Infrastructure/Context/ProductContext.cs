@@ -5,10 +5,12 @@ namespace ProductServer.Infrastructure.Context;
 
 public class ProductContext : DbContext
 {
-    public ProductContext(DbContextOptions<ProductContext> options)
-        : base(options)
-    {
-    }
+    protected readonly IConfiguration Configuration;
 
     public DbSet<Product> Products { get; set; }
+
+    public ProductContext(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 }

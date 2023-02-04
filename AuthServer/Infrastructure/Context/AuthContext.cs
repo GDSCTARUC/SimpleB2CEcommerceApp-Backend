@@ -5,9 +5,12 @@ namespace AuthServer.Infrastructure.Context;
 
 public class AuthContext : DbContext
 {
-    public AuthContext(DbContextOptions<AuthContext> options) : base(options)
-    {
-    }
+    protected readonly IConfiguration Configuration;
 
     public DbSet<User> Users { get; set; }
+
+    public AuthContext(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 }

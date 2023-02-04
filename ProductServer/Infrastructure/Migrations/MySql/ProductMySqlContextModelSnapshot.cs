@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductServer.Infrastructure.Context;
 
 #nullable disable
 
-namespace ProductServer.Infrastructure.Migrations
+namespace ProductServer.Infrastructure.Migrations.MySql
 {
-    [DbContext(typeof(ProductContext))]
-    [Migration("20230131150345_Migration_2")]
-    partial class Migration2
+    [DbContext(typeof(ProductMySqlContext))]
+    partial class ProductMySqlContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
