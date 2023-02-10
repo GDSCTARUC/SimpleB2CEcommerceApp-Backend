@@ -4,6 +4,7 @@ using CartServer.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CartServer.Infrastructure.Migrations.AzureSql
 {
     [DbContext(typeof(CartAzureSqlContext))]
-    partial class CartAzureSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230204160334_AzureSql_03")]
+    partial class AzureSql03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

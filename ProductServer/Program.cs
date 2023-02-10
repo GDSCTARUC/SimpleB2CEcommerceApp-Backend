@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Validation.AspNetCore;
+using ProductServer;
 using ProductServer.Constants;
 using ProductServer.Infrastructure.Context;
 using ProductServer.Infrastructure.Models;
@@ -59,11 +60,12 @@ else
             options.UseAspNetCore();
         });
 }
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(ProductServerCorsDefaults.PolicyName, policy =>
     {
-        policy.WithOrigins(ProductServerCorsDefaults.CorsOriginHttps, ProductServerCorsDefaults.CorsOriginHttp)
+        policy.WithOrigins(ProductServerCorsDefaults.CorsOriginHttps, ProductServerCorsDefaults.CorsOriginHttp, "https://icy-flower-09eb00c00.2.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -71,9 +73,15 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 builder.Services.AddAuthorization();
+builder.Services.AddHostedService<ProductWorker>();
 builder.Services.AddScoped<IValidator<ProductRequest>, ProductRequestValidator>();
 
 var app = builder.Build();
+
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+}
 
 app.UseCors(ProductServerCorsDefaults.PolicyName);
 app.UseHttpsRedirection();
@@ -117,7 +125,8 @@ app.MapPost("/productServer/static/image/upload", async (IFormFile imageFile) =>
 app.MapGet("/productServer/product/", async (ProductContext context) =>
     context.Products == null
         ? Results.BadRequest()
-        : Results.Ok(await context.Products.ToListAsync())).RequireAuthorization();
+        : Results.Ok(await context.Products.ToListAsync()))
+    .RequireAuthorization();
 
 // GET: Product with Id
 app.MapGet("/productServer/product/{id:int}/", async (int id, ProductContext context) =>
@@ -139,23 +148,26 @@ app.MapPost("/productServer/product/",
         if (!result.IsValid)
             return Results.BadRequest(result.Errors.First().ErrorMessage);
 
+        var newProduct = (Product)productRequest;
+
         try
         {
-            await context.Products.AddAsync((Product)productRequest);
+            await context.Products.AddAsync(newProduct);
             await context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch
         {
             return Results.BadRequest();
         }
 
-        return Results.Ok();
+        return Results.Ok(newProduct);
     }).RequireAuthorization();
 
 // PUT: Update Product
 app.MapPut("/productServer/product/{id:int}/",
     async (int id, ProductRequest productRequest, ProductContext context, IValidator<ProductRequest> validator) =>
     {
+        productRequest.Id = id;
         var result = await validator.ValidateAsync(productRequest);
 
         if (!result.IsValid)
@@ -166,22 +178,22 @@ app.MapPut("/productServer/product/{id:int}/",
         if (product == null)
             return Results.BadRequest("Product not found");
 
-        // try
-        // {
-        product.Name = productRequest.Name;
-        product.Description = productRequest.Description;
-        product.OriginalPrice = productRequest.OriginalPrice;
-        product.DiscountPercentage = productRequest.DiscountPercentage;
+        try
+        {
+            product.Name = productRequest.Name;
+            product.Description = productRequest.Description;
+            product.OriginalPrice = productRequest.OriginalPrice;
+            product.DiscountPercentage = productRequest.DiscountPercentage;
 
-        context.Products.Update(product);
-        await context.SaveChangesAsync();
-        // }
-        // catch
-        // {
-        //     return Results.BadRequest();
-        // }
+            context.Products.Update(product);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Results.BadRequest();
+        }
 
-        return Results.Ok();
+        return Results.Ok(product);
     }).RequireAuthorization();
 
 // DELETE: Delete Product

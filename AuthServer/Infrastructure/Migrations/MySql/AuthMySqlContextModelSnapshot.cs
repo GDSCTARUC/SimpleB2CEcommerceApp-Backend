@@ -35,6 +35,9 @@ namespace AuthServer.Infrastructure.Migrations.MySql
                     b.Property<string>("FirstName")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 

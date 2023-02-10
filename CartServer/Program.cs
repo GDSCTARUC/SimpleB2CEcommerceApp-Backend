@@ -20,6 +20,8 @@ switch (builder.Configuration["DatabaseProvider"])
         break;
 }
 
+builder.Services.AddDbContext<CartContext>();
+
 if (builder.Environment.IsProduction())
 {    
     builder.Services.AddOpenIddict()
@@ -64,7 +66,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(CartServerCorsDefaults.PolicyName, policy =>
     {
-        policy.WithOrigins(CartServerCorsDefaults.CorsOriginHttps, CartServerCorsDefaults.CorsOriginHttp)
+        policy.WithOrigins(CartServerCorsDefaults.CorsOriginHttps, CartServerCorsDefaults.CorsOriginHttp, "https://icy-flower-09eb00c00.2.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -75,6 +77,11 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+}
+    
 app.UseCors(CartServerCorsDefaults.PolicyName);
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -88,12 +95,22 @@ app.MapGet("/cartServer/cart/{id:int}/",
             : Results.Ok((CartDto)await context.Carts.SingleOrDefaultAsync(m => m.Id == id))
 ).RequireAuthorization();
 
+// GET: Cart with UserId
+app.MapGet("/cartServer/cart/user/{id:int}/",
+    async (int id, CartContext context) =>
+        context.Carts == null
+            ? Results.BadRequest()
+            : Results.Ok((CartDto)await context.Carts.SingleOrDefaultAsync(m => m.UserId == id))
+).RequireAuthorization();
+
 // POST: Create Cart
 app.MapPost("/cartServer/cart/", async (CartRequest cartRequest, CartContext context) =>
 {
+    var newCart = (Cart)cartRequest;
+
     try
     {
-        await context.Carts.AddAsync((Cart)cartRequest);
+        await context.Carts.AddAsync(newCart);
         await context.SaveChangesAsync();
     }
     catch
@@ -101,7 +118,7 @@ app.MapPost("/cartServer/cart/", async (CartRequest cartRequest, CartContext con
         return Results.BadRequest();
     }
 
-    return Results.Ok();
+    return Results.Ok((CartDto) newCart);
 }).RequireAuthorization();
 
 // PUT: Update Cart
@@ -115,7 +132,7 @@ app.MapPut("/cartServer/cart/{id:int}/", async (int id, CartRequest cartRequest,
     try
     {
         cart.ProductIds = JsonSerializer.Serialize(cartRequest.ProductIds);
-
+        
         context.Carts.Update(cart);
         await context.SaveChangesAsync();
     }
@@ -124,7 +141,7 @@ app.MapPut("/cartServer/cart/{id:int}/", async (int id, CartRequest cartRequest,
         return Results.BadRequest();
     }
 
-    return Results.Ok();
+    return Results.Ok((CartDto) cart);
 }).RequireAuthorization();
 
 // DELETE: Delete Cart

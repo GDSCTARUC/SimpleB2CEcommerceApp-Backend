@@ -1,6 +1,6 @@
 ﻿namespace SharedLibrary.Infrastructure.DataTransferObjects;
 
-public class ProductDto
+public class ProductDto : DtoBase
 {
     public string Name { get; set; }
     public string Description { get; set; }

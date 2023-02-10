@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(ApiGatewayServerCorsDefaults.PolicyName, policy =>
     {
-        policy.WithOrigins(ApiGatewayServerCorsDefaults.CorsOriginHttps, ApiGatewayServerCorsDefaults.CorsOriginHttp)
+        policy.WithOrigins(ApiGatewayServerCorsDefaults.CorsOriginHttps, ApiGatewayServerCorsDefaults.CorsOriginHttp, "https://icy-flower-09eb00c00.2.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
