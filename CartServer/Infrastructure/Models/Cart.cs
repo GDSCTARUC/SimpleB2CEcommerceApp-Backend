@@ -7,13 +7,18 @@ namespace CartServer.Infrastructure.Models;
 
 public class Cart : ModelBase
 {
+    public int UserId { get; set; }
     public string ProductIds { get; set; }
 
     public static implicit operator CartDto(Cart cart)
     {
         return new CartDto
         {
-            ProductIds = JsonSerializer.Deserialize<List<int>>(cart.ProductIds)
+            Id = cart.Id,
+            UserId = cart.UserId,
+            ProductIds = JsonSerializer.Deserialize<List<int>>(cart.ProductIds),
+            UpdatedAt = cart.UpdatedAt,
+            CreatedAt = cart.CreatedAt
         };
     }
 
@@ -21,6 +26,7 @@ public class Cart : ModelBase
     {
         return new Cart
         {
+            UserId = cartRequest.UserId,
             ProductIds = JsonSerializer.Serialize(cartRequest.ProductIds)
         };
     }

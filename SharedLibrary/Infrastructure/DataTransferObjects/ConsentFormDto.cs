@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Infrastructure.DataTransferObjects;
 
-public class ConsentFormDto
+public class ConsentFormDto : DtoBase
 {
     [Display(Name = "Application")] public string ApplicationName { get; set; }
 

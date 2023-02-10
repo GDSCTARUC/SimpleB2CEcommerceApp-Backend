@@ -11,6 +11,7 @@ public class User : ModelBase
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PasswordHashed { get; set; }
+    public bool IsAdmin { get; set; }
 
     public static implicit operator UserDto(User user)
     {
@@ -19,7 +20,8 @@ public class User : ModelBase
             Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email
+            Email = user.Email,
+            IsAdmin = user.IsAdmin
         };
     }
 
@@ -31,7 +33,8 @@ public class User : ModelBase
             FirstName = userRegisterRequest.FirstName,
             LastName = userRegisterRequest.LastName,
             Email = userRegisterRequest.Email,
-            PasswordHashed = null
+            PasswordHashed = null,
+            IsAdmin = false
         };
     }
 }

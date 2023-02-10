@@ -26,11 +26,14 @@ public class Product : ModelBase
     {
         return new ProductDto
         {
+            Id = product.Id,
             Name = product.Name,
             Description = product.Description,
             OriginalPrice = product.OriginalPrice,
             DiscountPercentage = product.DiscountPercentage,
-            ImageFileName = product.ImageFileName
+            ImageFileName = product.ImageFileName,
+            UpdatedAt = product.UpdatedAt,
+            CreatedAt = product.CreatedAt
         };
     }
 

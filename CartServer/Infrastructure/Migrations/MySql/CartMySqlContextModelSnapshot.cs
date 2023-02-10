@@ -35,6 +35,9 @@ namespace CartServer.Infrastructure.Migrations.MySql
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Carts");

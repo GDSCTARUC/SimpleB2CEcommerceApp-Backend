@@ -3,11 +3,11 @@ using OpenIddict.Abstractions;
 
 namespace AuthServer;
 
-public class Worker : IHostedService
+public class OpenIddictWorker : IHostedService
 {
     private readonly IServiceProvider _serverProvider;
 
-    public Worker(IServiceProvider serverProvider)
+    public OpenIddictWorker(IServiceProvider serverProvider)
     {
         _serverProvider = serverProvider;
     }
@@ -49,13 +49,43 @@ public class Worker : IHostedService
                 }
             }, cancellationToken);
 
+        if (await applicationManager.FindByClientIdAsync("angular", cancellationToken) == null)
+            await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+            {
+                ClientId = "angular",
+                DisplayName = "Angular Client",
+                RedirectUris = { new Uri("https://localhost:3000") },
+                PostLogoutRedirectUris = { new Uri("https://localhost:3000") },
+                Permissions =
+                {
+                    OpenIddictConstants.Permissions.Endpoints.Authorization,
+                    OpenIddictConstants.Permissions.Endpoints.Token,
+                    OpenIddictConstants.Permissions.Endpoints.Logout,
+
+                    OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+
+                    OpenIddictConstants.Permissions.Scopes.Profile,
+                    OpenIddictConstants.Permissions.Scopes.Address,
+                    OpenIddictConstants.Permissions.Scopes.Email,
+                    OpenIddictConstants.Permissions.Scopes.Phone,
+                    OpenIddictConstants.Permissions.Scopes.Roles,
+
+                    OpenIddictConstants.Permissions.Prefixes.Scope + "cart_api",
+                    OpenIddictConstants.Permissions.Prefixes.Scope + "product_api",
+
+                    OpenIddictConstants.Permissions.ResponseTypes.Code
+                }
+            }, cancellationToken);
+
         if (await applicationManager.FindByClientIdAsync("frontend", cancellationToken) == null)
             await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = "frontend",
                 DisplayName = "Frontend Client",
-                RedirectUris = { new Uri("https://localhost:3000") },
-                PostLogoutRedirectUris = { new Uri("https://localhost:3000") },
+                RedirectUris = { new Uri("https://icy-flower-09eb00c00.2.azurestaticapps.net") },
+                PostLogoutRedirectUris = { new Uri("https://icy-flower-09eb00c00.2.azurestaticapps.net") },
                 Permissions =
                 {
                     OpenIddictConstants.Permissions.Endpoints.Authorization,

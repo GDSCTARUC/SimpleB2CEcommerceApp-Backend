@@ -1,4 +1,3 @@
-using System.Data.SqlTypes;
 using System.Text;
 using AuthServer.Constants;
 using AuthServer.Infrastructure.Context;
@@ -6,7 +5,6 @@ using AuthServer.Infrastructure.Models;
 using AuthServer.Infrastructure.Policies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -33,7 +31,7 @@ public static class Program
         {
             options.AddPolicy(AuthServerCorsDefault.PolicyName, policy =>
             {
-                policy.WithOrigins(AuthServerCorsDefault.CorsOriginHttps, AuthServerCorsDefault.CorsOriginHttp)
+                policy.WithOrigins(AuthServerCorsDefault.CorsOriginHttps, AuthServerCorsDefault.CorsOriginHttp, "https://icy-flower-09eb00c00.2.azurestaticapps.net")
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
@@ -55,7 +53,9 @@ public static class Program
                 else
                 {
                     options.AddEncryptionKey(new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("thisisaveryverylongencryptionkey")));
+                        Encoding.UTF8.GetBytes("thisisaveryverylongencryptionkey")));
+
+                    options.AddDevelopmentSigningCertificate();
                 }
 
                 options.AllowClientCredentialsFlow()
@@ -110,18 +110,21 @@ public static class Program
             .AddJsonOptions(options =>
                 options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy());
 
-        builder.Services.AddHostedService<Worker>();
+        builder.Services.AddHostedService<OpenIddictWorker>();
         builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
+        if (builder.Environment.IsProduction())
+        {
+            builder.Services.AddHostedService<UserWorker>();
+        }
+        
         var app = builder.Build();
 
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsProduction())
         {
-            app.Services.GetRequiredService<AuthContext>().Database.Migrate();
-
             app.UseExceptionHandler("/Error");
             app.UseHsts();
-        }
+        } 
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();

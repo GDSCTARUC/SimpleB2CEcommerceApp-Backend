@@ -21,10 +21,12 @@ public class ProductRequestValidator : AbstractValidator<ProductRequest>
 
     private bool UniqueName(ProductRequest productRequest, string name)
     {
-        var dbProduct = _context.Products
-            .SingleOrDefault(m => m.Name == name);
+        var dbProduct = _context.Products.SingleOrDefault(m => m.Name == name);
 
         if (dbProduct == null)
+            return true;
+
+        if (productRequest.Id == dbProduct.Id && dbProduct.Name == name)
             return true;
 
         return dbProduct.Name != name;

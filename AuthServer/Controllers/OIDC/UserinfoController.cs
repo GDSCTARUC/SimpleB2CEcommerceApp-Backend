@@ -43,7 +43,8 @@ public class UserinfoController : Controller
             {
                 user.Username,
                 user.FirstName,
-                user.LastName
+                user.LastName,
+                user.IsAdmin
             };
 
         if (User.HasScope(Scopes.Address))
