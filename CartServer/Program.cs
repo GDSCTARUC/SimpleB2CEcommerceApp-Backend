@@ -20,8 +20,6 @@ switch (builder.Configuration["DatabaseProvider"])
         break;
 }
 
-builder.Services.AddDbContext<CartContext>();
-
 if (builder.Environment.IsProduction())
 {    
     builder.Services.AddOpenIddict()
